@@ -1,10 +1,13 @@
 ﻿using CrowBot.Commands.Attributes;
+using CrowBot.NinjectModules;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Ninject;
+using CrowBot.Commands.Storage;
 
 namespace CrowBot.Commands
 {
@@ -39,8 +42,9 @@ namespace CrowBot.Commands
         public Command CreateCommandByName(string chatName)
         {
             Type commandType = commands[chatName];
-
-            return Activator.CreateInstance(commandType) as Command;
+            Command commandInstance = Activator.CreateInstance(commandType) as Command;
+            Program.Container.Inject(commandInstance);
+            return commandInstance;
         }
     }
 }

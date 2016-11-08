@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Ninject;
 using CrowBot.Commands;
 using CrowBot.Services;
+using CrowBot.Commands.Storage;
+using CrowBot.Commands.Attributes;
 
 namespace CrowBot
 {
@@ -15,7 +17,8 @@ namespace CrowBot
         {
             Bind<ICommandScanner>().To<CommandScanner>();
             Bind<ICommandFactory>().To<CommandFactory>();
-            Bind<IRedditClient>().To<RedditClient>();
+            //Bind<IRedditClient>().To<RedditClient>();
+            Bind<IPoeWikiClient>().To<PoeWikiClient>().WhenInjectedInto<PoeWikiCommand>();
         }
     }
 }

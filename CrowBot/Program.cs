@@ -9,6 +9,7 @@ using CrowBot.Services;
 using CrowBot.Commands;
 using System.Reflection;
 using System.Configuration;
+using CrowBot.NinjectModules;
 
 namespace CrowBot
 {
@@ -29,6 +30,8 @@ namespace CrowBot
         /// </summary>
         private static string CommandPrefix = "+";
 
+        public static IKernel Container;
+
         /// <summary>
         /// Entry point of the program.
         /// </summary>
@@ -37,10 +40,9 @@ namespace CrowBot
         {
             #region ninject init
 
-            var kernel = new StandardKernel();
-            kernel.Load(Assembly.GetExecutingAssembly());
-
-            _commandScanner = kernel.Get<CommandScanner>();
+            Container = new StandardKernel();
+            Container.Load(new NinjectBindings());
+            _commandScanner = Container.Get<CommandScanner>();
 
             #endregion
 
@@ -63,7 +65,7 @@ namespace CrowBot
 
             _client.ExecuteAndWait(async () =>
             {
-                await _client.Connect(token);
+                await _client.Connect(token, TokenType.Bot);
             });
             
         }
@@ -87,7 +89,6 @@ namespace CrowBot
             }
             else
             {
-                e.Channel.SendMessage("memes");
                 // invoke reply scanner
             }
         }

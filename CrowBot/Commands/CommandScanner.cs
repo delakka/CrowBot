@@ -46,12 +46,19 @@ namespace CrowBot.Commands
         /// </summary>
         public async void Scan(MessageEventArgs message)
         {
-            Command command = Parse(message.Message.Text.Substring(1));
-            if (command == null) return;
+            try
+            {
+                Command command = Parse(message.Message.Text.Substring(1));
+                if (command == null) return;
 
-            if (!command.CheckParameters()) return;
+                if (!command.CheckParameters()) return;
 
-            await command.Run(message);
+                await command.Run(message);
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
         }
 
         /// <summary>
